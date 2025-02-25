@@ -10,4 +10,4 @@ Shopease is an e-commerce platform with a **React Vite frontend** and a **Java b
 ## 🚀 Setup Instructions
 ### 1. Clone the repository
 ```sh
-git clone https://github.com/your-username/your-repo.git
+git clone https://github.com/Siva2411/ShopEase-Ecommerce-Web-APP.git
