@@ -1,0 +1,12 @@
+package com.shiva.shopease.exception;
+
+public class CategoryNotFoundException extends RuntimeException {
+/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
+	public CatgoryNotFoundException(String messageString) {
+		super(messageString);
+	}
+}

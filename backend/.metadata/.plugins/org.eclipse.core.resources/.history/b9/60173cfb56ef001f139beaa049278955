@@ -1,0 +1,39 @@
+package com.shiva.shopease.mapper;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.shiva.shopease.dto.CategoryDTO;
+import com.shiva.shopease.dto.CategoryTypeDTO;
+import com.shiva.shopease.entity.Category;
+import com.shiva.shopease.entity.CategoryType;
+
+public class CategoryMapper {
+	private CategoryDTO mapToDto(Category category) {
+	    CategoryDTO categoryDto = new CategoryDTO();
+	    categoryDto.setId(category.getId());
+	    categoryDto.setName(category.getName());
+	    categoryDto.setCode(category.getCode());
+	    categoryDto.setDescription(category.getDescription());
+
+	    if (category.getCategoryVarients() != null) {
+	        List<CategoryTypeDTO> categoryTypeDtos = category.getCategoryVarients()
+	                .stream()
+	                .map(this::mapToCategoryTypeDto)
+	                .collect(Collectors.toList());
+	        categoryDto.setCategoryTypes(categoryTypeDtos);
+	    }
+
+	    return categoryDto;
+	}
+
+	private CategoryTypeDTO mapToCategoryTypeDto(CategoryType categoryType) {
+	    CategoryTypeDTO categoryTypeDto = new CategoryTypeDTO();
+	    categoryTypeDto.setId(categoryType.getId());
+	    categoryTypeDto.setName(categoryType.getName());
+	    categoryTypeDto.setCode(categoryType.getCode());
+	    categoryTypeDto.setDescription(categoryType.getDescription());
+	    return categoryTypeDto;
+	}
+
+}

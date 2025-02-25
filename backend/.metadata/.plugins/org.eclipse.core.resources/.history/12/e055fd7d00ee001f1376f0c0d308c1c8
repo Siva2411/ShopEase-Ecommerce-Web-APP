@@ -1,0 +1,2 @@
+spring.application.name=shopease
+spring.mvc.servlet.path=/api

@@ -1,0 +1,54 @@
+package com.shiva.shopease.service;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.entity.Category;
+import com.shiva.shopease.entity.Product;
+import com.shiva.shopease.mapper.CategoryMapper;
+import com.shiva.shopease.mapper.ProductMapper;
+import com.shiva.shopease.repository.CategoryRepository;
+import com.shiva.shopease.repository.ProductRepository;
+
+@Service
+public class ProductServiceImpl implements ProductService{
+	private final ProductRepository productRepository;
+	private final CategoryRepository categoryRepository;
+	public ProductServiceImpl(ProductRepository productRepository,CategoryRepository categoryRepository) {
+		this.productRepository = productRepository;
+		this.categoryRepository = categoryRepository;
+	}
+	@Override
+	public Product addProduct(ProductDTO productDTO) {
+		Category category = categoryRepository.findById(productDTO.getCategoryId()).orElse(null);
+		return ProductMapper.mapToProduct(productDTO, category);
+	}
+
+	@Override
+	public List<ProductDTO> getAllProducts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public ProductDTO getProductById(UUID id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Product updateProduct(ProductDTO productDTO, UUID id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Product fetchProductById(UUID uuid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+}

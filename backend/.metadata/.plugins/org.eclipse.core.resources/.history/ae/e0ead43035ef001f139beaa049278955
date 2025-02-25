@@ -1,0 +1,5 @@
+package com.shiva.shopease.dto;
+
+public class CategoryTypeDTO {
+
+}

@@ -1,0 +1,16 @@
+package com.shiva.shopease.entity;
+
+import java.util.List;
+import java.util.UUID;
+
+import jakarta.persistence.Id;
+
+public class Category {
+	@Id
+	private UUID id;
+	private String name;
+	private String code;
+	private String description;
+	
+	private List<CategoryVarient> categoryVarients;
+}

@@ -1,0 +1,67 @@
+package com.shiva.shopease.mapper;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.shiva.shopease.dto.CategoryDTO;
+import com.shiva.shopease.dto.CategoryTypeDTO;
+import com.shiva.shopease.entity.Category;
+import com.shiva.shopease.entity.CategoryType;
+
+public class CategoryMapper {
+	private CategoryMapper() {}
+	public static CategoryDTO mapToDTO(Category category) {
+	    CategoryDTO categoryDto = new CategoryDTO();
+	    categoryDto.setId(category.getId());
+	    categoryDto.setName(category.getName());
+	    categoryDto.setCode(category.getCode());
+	    categoryDto.setDescription(category.getDescription());
+
+	    if (category.getCategoryVarients() != null) {
+	        List<CategoryTypeDTO> categoryTypeDtos = category.getCategoryVarients()
+	                .stream()
+	                .map(CategoryMapper::mapToCategoryTypeDTO)
+	                .collect(Collectors.toList());
+	        categoryDto.setCategoryTypes(categoryTypeDtos);
+	    }
+
+	    return categoryDto;
+	}
+
+	public static CategoryTypeDTO mapToCategoryTypeDTO(CategoryType categoryType) {
+	    CategoryTypeDTO categoryTypeDto = new CategoryTypeDTO();
+	    categoryTypeDto.setId(categoryType.getId());
+	    categoryTypeDto.setName(categoryType.getName());
+	    categoryTypeDto.setCode(categoryType.getCode());
+	    categoryTypeDto.setDescription(categoryType.getDescription());
+	    return categoryTypeDto;
+	}
+	public static Category mapToEntity(CategoryDTO categoryDto) {
+	    Category category = new Category();
+	    category.setId(categoryDto.getId()); // Only set ID if updating
+	    category.setName(categoryDto.getName());
+	    category.setCode(categoryDto.getCode());
+	    category.setDescription(categoryDto.getDescription());
+
+	    if (categoryDto.getCategoryTypes() != null) {
+	        List<CategoryType> categoryTypes = categoryDto.getCategoryTypes()
+	                .stream()
+	                .map(dto -> mapToCategoryTypeEntity(dto, category))
+	                .collect(Collectors.toList());
+	        category.setCategoryVarients(categoryTypes);
+	    }
+
+	    return category;
+	}
+
+	public static CategoryType mapToCategoryTypeEntity(CategoryTypeDTO categoryTypeDto, Category category) {
+	    CategoryType categoryType = new CategoryType();
+	    categoryType.setId(categoryTypeDto.getId()); // Only set ID if updating
+	    categoryType.setName(categoryTypeDto.getName());
+	    categoryType.setCode(categoryTypeDto.getCode());
+	    categoryType.setDescription(categoryTypeDto.getDescription());
+	    categoryType.setCategory(category);
+	    return categoryType;
+	}
+
+}

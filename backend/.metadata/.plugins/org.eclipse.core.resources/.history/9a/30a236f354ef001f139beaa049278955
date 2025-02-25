@@ -1,0 +1,40 @@
+package com.shiva.shopease.service;
+
+import java.util.List;
+import java.util.UUID;
+
+import com.shiva.shopease.dto.CategoryDTO;
+
+public class CategoryServiceImpl implements CategoryService{
+
+	@Override
+	public CategoryDTO getCategory(UUID id) {
+		
+		return null;
+	}
+
+	@Override
+	public void createCategory(CategoryDTO categoryDTO) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public List<CategoryDTO> getAllCategory() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CategoryDTO updateCategory(CategoryDTO categoryDTO, UUID id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void deleteCategory(UUID id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+}

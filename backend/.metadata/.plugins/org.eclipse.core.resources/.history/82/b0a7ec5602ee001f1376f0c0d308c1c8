@@ -1,0 +1,54 @@
+package com.shiva.shopease.entity;
+
+import java.math.BigDecimal;
+import java.util.Date;
+import java.util.UUID;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "product")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Product {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private UUID id;
+
+	@Column(name = "name", nullable = false)
+	private String name;
+
+	@Column
+	private String description;
+
+	@Column(nullable = false)
+	private BigDecimal price;
+
+	@Column(nullable = false)
+	private String brand;
+
+	@Column
+	private Float rating;
+	
+	@Column(nullable = false)
+	private Boolean newArrival;
+	
+	@Column(nullable = false,updatable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date createdAt;
+	
+	@Column(nullable = false)
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date updatedAt;
+}

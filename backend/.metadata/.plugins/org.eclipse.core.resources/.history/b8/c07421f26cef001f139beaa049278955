@@ -1,0 +1,5 @@
+package com.shiva.shopease.exception;
+
+public class ProductNotFoundException extends Exception {
+
+}

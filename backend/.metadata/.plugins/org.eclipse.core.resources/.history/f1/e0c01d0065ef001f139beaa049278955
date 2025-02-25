@@ -1,0 +1,68 @@
+package com.shiva.shopease.service;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.shiva.shopease.dto.CategoryDTO;
+import com.shiva.shopease.dto.CategoryTypeDTO;
+import com.shiva.shopease.entity.Category;
+import com.shiva.shopease.entity.CategoryType;
+import com.shiva.shopease.exception.CategoryNotFoundException;
+import com.shiva.shopease.mapper.CategoryMapper;
+import com.shiva.shopease.repository.CategoryRepository;
+
+@Service
+public class CategoryServiceImpl implements CategoryService {
+	private CategoryRepository categoryRepository;
+
+	@Override
+	public Optional<CategoryDTO> getCategory(UUID id) {
+		return categoryRepository.findById(id).map(CategoryMapper::mapToDTO);
+	}
+
+	@Override
+	public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+		if (categoryDTO.getId() != null && categoryRepository.existsById(categoryDTO.getId())) {
+			throw new IllegalArgumentException("Category with ID already exists: " + categoryDTO.getId());
+		}
+
+		Category category = CategoryMapper.mapToEntity(categoryDTO);
+		category = categoryRepository.save(category); // Save and get generated ID
+
+		return CategoryMapper.mapToDTO(category); // Return DTO with updated ID
+	}
+
+	@Override
+	public List<CategoryDTO> getAllCategory() {
+		List<Category> categories = categoryRepository.findAll();// findAll returns non-null list i.e empty if no
+																	// categories
+		return categories.stream().map(CategoryMapper::mapToDTO).toList();
+	}
+
+	@Override
+	public CategoryDTO updateCategory(CategoryDTO categoryDTO, UUID id) throws CategoryNotFoundException{
+		Category existingCategory = categoryRepository.findById(id).orElseThrow(()->new CategoryNotFoundException(id));
+		existingCategory.setName(categoryDTO.getName());
+		existingCategory.setCode(categoryDTO.getCode());
+		existingCategory.setDescription(categoryDTO.getDescription());
+
+		List<CategoryTypeDTO> categoryTypes = categoryDTO.getCategoryTypes();
+		if (Objects.nonNull(categoryTypes)) {
+			List<CategoryType> categoryVarients = categoryTypes.stream()
+					.map(categoryType -> CategoryMapper.mapToCategoryTypeEntity(categoryType, existingCategory))
+					.toList();
+			existingCategory.setCategoryVarients(categoryVarients);
+		}
+		return existingCategory==null?null:CategoryMapper.mapToDTO(existingCategory);
+	}
+
+	@Override
+	public void deleteCategory(UUID id) {
+
+	}
+
+}

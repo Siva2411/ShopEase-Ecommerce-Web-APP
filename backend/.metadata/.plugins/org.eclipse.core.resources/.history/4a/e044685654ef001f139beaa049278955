@@ -1,0 +1,15 @@
+package com.shiva.shopease.service;
+
+import java.util.UUID;
+
+import com.shiva.shopease.entity.Category;
+
+public class CategoryService {
+
+	public Category getCategory(UUID categoryId) {
+		return null;
+		// TODO Auto-generated method stub
+		
+	}
+
+}

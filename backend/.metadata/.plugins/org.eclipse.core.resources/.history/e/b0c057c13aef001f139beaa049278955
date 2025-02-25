@@ -1,0 +1,18 @@
+package com.shiva.shopease.mapper;
+
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.entity.Product;
+
+public class ProductMapper {
+	
+	public Product mapToProduct(ProductDTO productDTO) {
+		Product product = new Product();
+		if(productDTO.getId() != null)
+			product.setId(productDTO.getId());
+		product.setName(productDTO.getName());
+		product.setBrand(productDTO.getBrand());
+		product.setPrice(productDTO.getPrice());
+		product.setNewArrival(productDTO.isNewArrival());
+		//product.setSlug(productDTO.getSlug());
+	}
+}

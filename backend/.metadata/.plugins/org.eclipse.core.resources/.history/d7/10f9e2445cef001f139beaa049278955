@@ -1,0 +1,139 @@
+package com.shiva.shopease.mapper;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+import java.util.Optional;
+import java.util.stream.Collectors;
+
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.dto.ProductResourceDTO;
+import com.shiva.shopease.dto.ProductVarientDTO;
+import com.shiva.shopease.entity.Category;
+import com.shiva.shopease.entity.CategoryType;
+import com.shiva.shopease.entity.Product;
+import com.shiva.shopease.entity.ProductVarient;
+import com.shiva.shopease.entity.Resources;
+import com.shiva.shopease.enums.Size;
+
+public class ProductMapper {
+
+    public Product mapToProduct(ProductDTO productDTO, Category category) {
+        Product product = new Product();
+        if (productDTO.getId() != null)
+            product.setId(productDTO.getId());
+        
+        product.setName(productDTO.getName());
+        product.setBrand(productDTO.getBrand());
+        product.setPrice(productDTO.getPrice());
+        product.setNewArrival(productDTO.isNewArrival());
+        product.setDescription(productDTO.getDescription());
+
+        // Set Category and CategoryType
+        if (Objects.nonNull(category)) {
+            product.setCategory(category);
+            UUID categoryTypeId = productDTO.getCategoryTypeId();
+            CategoryType categoryType = category.getCategoryVarients().stream()
+                    .filter(ct -> ct.getId().equals(categoryTypeId))
+                    .findFirst().orElse(null);
+            product.setCategoryType(categoryType);
+        }
+
+        // Convert Variants
+        if (Objects.nonNull(productDTO.getVarients())) {
+            List<ProductVarient> productVarients = productDTO.getVarients().stream()
+                    .map(varientDTO -> mapToProductVarient(varientDTO, product))
+                    .collect(Collectors.toList());
+            product.setProductsVarients(productVarients);
+        }
+
+        // Convert Resources
+        if (Objects.nonNull(productDTO.getProductResources())) {
+            List<Resources> productResources = productDTO.getProductResources().stream()
+                    .map(resourceDTO -> mapToProductResource(resourceDTO, product))
+                    .collect(Collectors.toList());
+            product.setResources(productResources);
+        }
+
+        return product;
+    }
+
+    private Resources mapToProductResource(ProductResourceDTO productResourceDTO, Product product) {
+        Resources resources = new Resources();
+        if (productResourceDTO.getId() != null) {
+            resources.setId(productResourceDTO.getId());
+        }
+        resources.setName(productResourceDTO.getName());
+        resources.setType(productResourceDTO.getType());
+        resources.setUrl(productResourceDTO.getUrl());
+        resources.setIsPrimary(productResourceDTO.getIsPrimary());
+        resources.setProduct(product);
+        return resources;
+    }
+
+    public ProductVarient mapToProductVarient(ProductVarientDTO productVarientDTO, Product product) {
+        ProductVarient productVariant = new ProductVarient();
+        if (productVarientDTO.getId() != null) {
+            productVariant.setId(productVarientDTO.getId());
+        }
+        productVariant.setColor(productVarientDTO.getColor());
+        productVariant.setSize(Size.valueOf(productVarientDTO.getSize()));
+        productVariant.setStockQuantity(productVarientDTO.getStockQuantity());
+        productVariant.setProduct(product);
+        return productVariant;
+    }
+
+    public List<ProductDTO> mapToProductDTOList(List<Product> products) {
+        if (Objects.isNull(products)) {
+            return List.of(); // Return empty list instead of null
+        }
+        return products.stream().map(this::mapToProductDTO).collect(Collectors.toList());
+    }
+
+    private ProductDTO mapToProductDTO(Product product) {
+        return ProductDTO.builder()
+                .id(product.getId())
+                .brand(product.getBrand())
+                .name(product.getName())
+                .price(product.getPrice())
+                .isNewArrival(product.getNewArrival())
+                .rating(product.getRating())
+                .description(product.getDescription())
+                .thumbnail(getProductThumbnail(product.getResources()))
+                .build();
+    }
+
+    private String getProductThumbnail(List<Resources> resources) {
+        return Optional.ofNullable(resources)
+                .flatMap(resList -> resList.stream().filter(Resources::getIsPrimary).findFirst())
+                .map(Resources::getUrl)
+                .orElse(null);
+    }
+
+    public List<ProductVarientDTO> mapProductVariantListToDto(List<ProductVarient> productVariants) {
+        return productVariants.stream().map(this::mapProductVariantDto).collect(Collectors.toList());
+    }
+
+    private ProductVarientDTO mapProductVariantDto(ProductVarient productVariant) {
+        return ProductVarientDTO.builder()
+                .color(productVariant.getColor())
+                .id(productVariant.getId())
+                .size(productVariant.getSize().toString())
+                .stockQuantity(productVariant.getStockQuantity())
+                .build();
+    }
+
+    public List<ProductResourceDTO> mapProductResourcesListToDto(List<Resources> resources) {
+        return resources.stream().map(this::mapResourceToDto).collect(Collectors.toList());
+    }
+
+    private ProductResourceDTO mapResourceToDto(Resources resources) {
+        return ProductResourceDTO.builder()
+                .id(resources.getId())
+                .url(resources.getUrl())
+                .name(resources.getName())
+                .isPrimary(resources.getIsPrimary())
+                .type(resources.getType())
+                .build();
+    }
+}

@@ -1,0 +1,7 @@
+package com.shiva.shopease.exception;
+
+public class CatgoryNotFoundException extends RuntimeException {
+	public CatgoryNotFoundException(String messageString) {
+		super(messageString);
+	}
+}

@@ -1,0 +1,27 @@
+package com.shiva.shopease.controller;
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.entity.Product;
+
+import java.util.List;
+@RestController
+@RequestMapping("/products")
+public class ProductController {
+	@GetMapping("/")
+	public List<ProductDTO> getAllProducts(){
+		return null;
+	}
+	@GetMapping("/{}")
+	public ProductDTO getProductById(){
+		return null;
+	}
+	@PostMapping()
+	public ProductDTO createProduct(@RequestBody Product product) {
+		return null;
+	}
+}

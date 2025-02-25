@@ -1,0 +1,42 @@
+package com.shiva.shopease.entity;
+
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.UUID;
+
+import com.shiva.shopease.enums.Size;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Table(name = "product_varient")
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ProductVarient {
+	
+	@Id
+	private UUID id;
+	
+	@Enumerated(EnumType.STRING)
+	@Column(nullable = false)
+	private Size size;
+	
+	@Column(nullable = false)
+	private String color;
+	
+	@Column(nullable = false,name = "quantity")
+	private int stockQuantity;
+	
+	private 
+}

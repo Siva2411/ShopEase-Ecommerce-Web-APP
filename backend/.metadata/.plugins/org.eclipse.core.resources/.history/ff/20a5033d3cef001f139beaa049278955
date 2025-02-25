@@ -1,0 +1,44 @@
+package com.shiva.shopease.mapper;
+
+import java.util.Objects;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.entity.Category;
+import com.shiva.shopease.entity.CategoryType;
+import com.shiva.shopease.entity.Product;
+import com.shiva.shopease.service.CategoryService;
+
+public class ProductMapper {
+	@Autowired
+    private CategoryService categoryService;
+	public Product mapToProduct(ProductDTO productDTO) {
+		Product product = new Product();
+		if(productDTO.getId() != null)
+			product.setId(productDTO.getId());
+		product.setName(productDTO.getName());
+		product.setBrand(productDTO.getBrand());
+		product.setPrice(productDTO.getPrice());
+		product.setNewArrival(productDTO.isNewArrival());
+		//product.setSlug(productDTO.getSlug());
+		
+		Category category = categoryService.getCategory(productDTO.getCategoryId());
+		if(Objects.nonNull(category)) {
+			product.setCategory(category);
+			UUID categoryTypeId = productDTO.getCategoryTypeId();
+			CategoryType categoryType = category.getCategoryVarients()
+												.stream()
+												.filter(categoryType1 -> categoryType1.getId().equals(categoryTypeId))
+												.findFirst()
+												.orElse(null);
+			product.setCategoryType(categoryType);
+		}
+		return product;
+		
+	}
+	public Category mapToCategory(ProductDTO productDTO) {
+		
+	}
+}

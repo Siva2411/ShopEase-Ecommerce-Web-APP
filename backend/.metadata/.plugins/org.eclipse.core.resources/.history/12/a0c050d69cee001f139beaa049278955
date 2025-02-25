@@ -1,0 +1,21 @@
+package com.shiva.shopease.service;
+
+import java.util.List;
+import java.util.UUID;
+
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.entity.Product;
+
+public interface ProductService {
+	public Product addProduct(ProductDTO typeId);
+
+	public List<ProductDTO> getAllProducts(UUID categoryId, UUID typeId);
+
+	ProductDTO getProductBySlug(String slug);
+
+	ProductDTO getProductById(UUID id);
+
+	Product updateProduct(ProductDTO productDTO, UUID id);
+
+	Product fetchProductById(UUID uuid) throws Exception;
+}

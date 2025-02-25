@@ -1,0 +1,19 @@
+package com.shiva.shopease.service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import com.shiva.shopease.dto.CategoryDTO;
+import com.shiva.shopease.exception.CategoryAlreadyExistsException;
+import com.shiva.shopease.exception.CategoryNotFoundException;
+
+public interface CategoryService {
+
+	Optional<CategoryDTO> getCategory(UUID id);
+	CategoryDTO createCategory(CategoryDTO categoryDTO) throws CategoryNotFoundException, CategoryAlreadyExistsException;
+	List<CategoryDTO> getAllCategory();
+	CategoryDTO updateCategory(CategoryDTO categoryDTO, UUID id) throws CategoryNotFoundException;
+	void deleteCategory(UUID id);
+
+}

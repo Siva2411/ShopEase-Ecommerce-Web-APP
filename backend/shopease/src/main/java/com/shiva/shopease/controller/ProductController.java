@@ -1,0 +1,69 @@
+package com.shiva.shopease.controller;
+
+import java.util.List;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.entity.Product;
+import com.shiva.shopease.exception.ProductAlreadyExistsException;
+import com.shiva.shopease.exception.ProductNotFoundException;
+import com.shiva.shopease.service.ProductService;
+
+@RestController
+@RequestMapping("/products")
+public class ProductController {
+	private final ProductService productService;
+
+	public ProductController(ProductService productService) {
+		this.productService = productService;
+	}
+
+	@GetMapping
+	public ResponseEntity<List<ProductDTO>> getAllProducts() {
+		List<ProductDTO> products = productService.getAllProducts();
+		return ResponseEntity.ok(products);
+	}
+
+	@PostMapping
+	public ResponseEntity<Product> createProduct(@RequestBody ProductDTO productDTO) {
+		Product product = productService.addProduct(productDTO);
+		return new ResponseEntity<>(product, HttpStatus.CREATED);
+	}
+
+	@PutMapping("{id}")
+	public ResponseEntity<Product> updateProduct(@RequestBody ProductDTO productDTO, @PathVariable UUID id) {
+		try {
+			Product product = productService.updateProduct(productDTO, id);
+			return ResponseEntity.ok(product);
+		} catch (ProductAlreadyExistsException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(null);
+		}
+	}
+
+	@DeleteMapping("{id}")
+	public ResponseEntity<Product> deleteProduct(@PathVariable UUID id) {
+		return null;
+	}
+
+	@GetMapping("/{id}")
+	public ResponseEntity<ProductDTO> getProductById(@PathVariable UUID id) {
+		try {
+			ProductDTO productDto = productService.getProductById(id);
+			return ResponseEntity.ok(productDto);
+		} catch (ProductNotFoundException e) {
+			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+		}
+	}
+
+}

@@ -1,0 +1,84 @@
+package com.shiva.shopease.mapper;
+
+import java.util.List;
+import java.util.Objects;
+import java.util.UUID;
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.dto.ProductResourceDTO;
+import com.shiva.shopease.dto.ProductVarientDTO;
+import com.shiva.shopease.entity.Category;
+import com.shiva.shopease.entity.CategoryType;
+import com.shiva.shopease.entity.Product;
+import com.shiva.shopease.entity.ProductVarient;
+import com.shiva.shopease.entity.Resources;
+import com.shiva.shopease.enums.Size;
+import com.shiva.shopease.service.CategoryService;
+
+public class ProductMapper {
+	@Autowired
+    private CategoryService categoryService;
+	public Product mapToProduct(ProductDTO productDTO) {
+		Product product = new Product();
+		if(productDTO.getId() != null)
+			product.setId(productDTO.getId());
+		product.setName(productDTO.getName());
+		product.setBrand(productDTO.getBrand());
+		product.setPrice(productDTO.getPrice());
+		product.setNewArrival(productDTO.isNewArrival());
+		//product.setSlug(productDTO.getSlug());
+		
+		Category category = categoryService.getCategory(productDTO.getCategoryId());
+		if(Objects.nonNull(category)) {
+			product.setCategory(category);
+			UUID categoryTypeId = productDTO.getCategoryTypeId();
+			CategoryType categoryType = category.getCategoryVarients()
+												.stream()
+												.filter(categoryType1 -> categoryType1.getId().equals(categoryTypeId))
+												.findFirst()
+												.orElse(null);
+			product.setCategoryType(categoryType);
+		}
+		List<ProductVarientDTO> productVarientDTOs = productDTO.getVarients();
+		if(Objects.nonNull(productVarientDTOs)) {
+			List<ProductVarient> productVarients = productVarientDTOs.stream()
+																	.map(productVarientDTO -> mapToProductVarient(productVarientDTO,product))
+																	.toList();
+			product.setProductsVarients(productVarients);
+		}
+		List<ProductResourceDTO> productResourceDTOs = productDTO.getProductResources();
+		if(Objects.nonNull(productVarientDTOs)) {
+			List<Resources> productResources = productResourceDTOs.stream()
+																	.map(productResourceDTO -> mapToProductResource(productResourceDTO,product))
+																	.toList();
+			product.setResources(productResources);
+		}
+		return product;
+		
+	}
+	private Resources mapToProductResource(ProductResourceDTO productResourceDTO, Product product) {
+		Resources resources= new Resources();
+        if(null != productResourceDTO.getId()){
+            resources.setId(productResourceDTO.getId());
+        }
+        resources.setName(productResourceDTO.getName());
+        resources.setType(productResourceDTO.getType());
+        resources.setUrl(productResourceDTO.getUrl());
+        resources.setIsPrimary(productResourceDTO.getIsPrimary());
+        resources.setProduct(product);
+        return resources;
+	}
+	public ProductVarient mapToProductVarient(ProductVarientDTO productVarientDTO, Product product) {
+		ProductVarient productVariant = new ProductVarient();
+         if(null != productVarientDTO.getId()){
+             productVariant.setId(productVarientDTO.getId());
+         }
+         productVariant.setColor(productVarientDTO.getColor());
+         productVariant.setSize(Size.valueOf(productVarientDTO.getSize()));
+         productVariant.setStockQuantity(productVarientDTO.getStockQuantity());
+         productVariant.setProduct(product);
+         return productVariant;
+	}
+}

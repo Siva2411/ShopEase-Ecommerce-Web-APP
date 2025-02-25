@@ -1,0 +1,41 @@
+package com.shiva.shopease.service;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
+
+import org.springframework.stereotype.Service;
+
+import com.shiva.shopease.dto.CategoryDTO;
+import com.shiva.shopease.entity.Category;
+import com.shiva.shopease.mapper.CategoryMapper;
+import com.shiva.shopease.repository.CategoryRepository;
+@Service
+public class CategoryServiceImpl implements CategoryService{
+	private CategoryRepository categoryRepository;
+	
+	@Override
+	public Optional<CategoryDTO> getCategory(UUID id) {
+		return categoryRepository.findById(id).map(CategoryMapper::mapToDTO);
+	}
+
+	@Override
+	public void createCategory(CategoryDTO categoryDTO) {
+	}
+
+	@Override
+	public List<CategoryDTO> getAllCategory() {
+		return null;
+	}
+
+	@Override
+	public CategoryDTO updateCategory(CategoryDTO categoryDTO, UUID id) {
+		return null;
+	}
+
+	@Override
+	public void deleteCategory(UUID id) {
+		
+	}
+
+}

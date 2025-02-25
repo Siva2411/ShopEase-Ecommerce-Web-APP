@@ -1,0 +1,36 @@
+package com.shiva.shopease.service.impl;
+
+import java.util.List;
+import java.util.UUID;
+
+import com.shiva.shopease.dto.ProductDTO;
+import com.shiva.shopease.entity.Product;
+import com.shiva.shopease.service.ProductService;
+
+public class ProductServiceImpl implements ProductService{
+	 @Override
+	public Product addProduct(ProductDTO typeId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	 @Override
+	public Product fetchProductById(UUID uuid) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	 @Override
+	public List<ProductDTO> getAllProducts() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	 @Override
+	public ProductDTO getProductById(UUID id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	 @Override
+	public Product updateProduct(ProductDTO productDTO, UUID id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+}
